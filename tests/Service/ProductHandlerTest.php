@@ -10,6 +10,7 @@ use App\Service\ProductHandler;
  */
 class ProductHandlerTest extends TestCase
 {
+
     private $products = [
         [
             'id' => 1,
@@ -55,14 +56,37 @@ class ProductHandlerTest extends TestCase
         ],
     ];
 
+    // 1.1
     public function testGetTotalPrice()
     {
-        $totalPrice = 0;
-        foreach ($this->products as $product) {
-            $price = $product['price'] ?: 0;
-            $totalPrice += $price;
-        }
+        $handle = new ProductHandler(...$this->products);
+        $total = $handle->getTotalPrice();
 
-        $this->assertEquals(143, $totalPrice);
+        $this->assertEquals(143, $total, '总价错误');
+    }
+
+    // 1.2 and 1.3
+    public function testAll()
+    {
+        $handle = new ProductHandler(...$this->products);
+        $handle->filter(['type' => 'Dessert'])->sortBy('price', true)->convertUnixTime('create_at');
+
+        $products = $handle->result();
+
+        // 1.2
+        $this->assertEquals(2, count($products), '筛选结果数量错误');
+        $this->assertTrue($products[0]['price'] >= $products[1]['price'], '排序不正确');
+
+        // 1.3
+        $this->assertEquals(
+            mktime(14, 38, 0, 4, 19, 2021), // 2021-04-19 14:38:00
+            $products[0]['create_at'],
+            '时间转换错误'
+        );
+        $this->assertEquals(
+            mktime(8, 45, 0, 4, 18, 2021), // 2021-04-18 08:45:00
+            $products[1]['create_at'],
+            '时间转换错误'
+        );
     }
 }
