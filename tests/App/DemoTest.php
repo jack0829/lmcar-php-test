@@ -16,7 +16,7 @@ class DemoTest extends TestCase
 
     public function test_get_user_info()
     {
-        $demo = new Demo(new AppLogger(), new HttpRequest);
+        $demo = new Demo(AppLogger::factory(), new HttpRequest);
         $userinfo = $demo->get_user_info();
 
         $this->assertIsArray($userinfo, '返回类型不为 array');
