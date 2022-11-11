@@ -8,6 +8,8 @@ use Exception;
 
 class AppLogger
 {
+    // 默认目录
+    const BASE_PATH = './logs';
 
     // 日志类型映射，之后可以增加 regist 方法追加日志类型
     protected static array $types = [
@@ -32,7 +34,7 @@ class AppLogger
             throw new Exception("日志方法不存在：$name");
         }
 
-        call_user_func_array([self::$logger, $name], $arguments);
+        return call_user_func_array([self::$logger, $name], $arguments);
     }
 
     // 静态模式 选择日志类型

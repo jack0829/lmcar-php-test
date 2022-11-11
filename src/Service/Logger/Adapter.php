@@ -17,4 +17,7 @@ interface Adapter
 
     // Error
     function error(string $message = '');
+
+    // 日志目录
+    function getPath(): string;
 }

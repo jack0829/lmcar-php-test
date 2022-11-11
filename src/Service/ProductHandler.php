@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use SebastianBergmann\CodeCoverage\Report\PHP;
+// use App\Service\PriceHandler;
 
 class ProductHandler
 {
@@ -27,7 +28,6 @@ class ProductHandler
 
     /**
      * 计算产品总价
-     * @param array ...$products
      * @return int
      */
     public function getTotalPrice(): int

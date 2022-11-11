@@ -1,0 +1,5 @@
+INFO - This is info message (26b9) log4php
+DEBUG - This is debug message (a56a) log4php
+ERROR - This is error message (a6de) log4php
+INFO - This is info message {f1d3} (static default)
+DEBUG - This is debug message {feb5} (static log4php)

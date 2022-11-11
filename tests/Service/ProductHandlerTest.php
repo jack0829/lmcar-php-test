@@ -66,7 +66,7 @@ class ProductHandlerTest extends TestCase
     }
 
     // 1.2 and 1.3
-    public function testAll()
+    public function testProductHandler()
     {
         $handle = new ProductHandler(...$this->products);
         $handle->filter(['type' => 'Dessert'])->sortBy('price', true)->convertUnixTime('create_at');

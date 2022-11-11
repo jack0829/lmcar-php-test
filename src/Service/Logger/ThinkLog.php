@@ -11,6 +11,12 @@ use think\facade\Log;
 class ThinkLog implements Adapter
 {
 
+    // Think 框架很多方法封装的不好
+    // 如果不用单文件模式，getMasterLogFile 是个 protected，不能使用
+    // 所以拿不到真实的日志文件 path
+    // 为了过单元测试，先用 single 模式吧
+    const SINGLE_LOG_NAME = 'think-log';
+
     // 单例
     private static ?ThinkLog $instance = null;
 
@@ -21,7 +27,8 @@ class ThinkLog implements Adapter
             'channels'    =>    [
                 'file'    =>    [
                     'type'    =>    'file',
-                    'path'    =>    $path,
+                    'path' => $path,
+                    'single' => self::SINGLE_LOG_NAME,
 
                     // 使用 ThinkLog 本身的处理器
                     'processor' => function (array $event, $type) {
@@ -49,7 +56,7 @@ class ThinkLog implements Adapter
     public static function inst(): Adapter
     {
         if (self::$instance === null) {
-            self::$instance = new self('think-log');
+            self::$instance = new self(Config::BASE_DIR, 'think-log');
         }
 
         return self::$instance;
@@ -77,5 +84,15 @@ class ThinkLog implements Adapter
     public function error(string $message = '')
     {
         Log::error($message);
+    }
+
+    /**
+     * @overwrite Adapter
+     */
+    public function getPath(): string
+    {
+        $cli = Log::runningInConsole();
+
+        return Config::BASE_DIR . DIRECTORY_SEPARATOR . self::SINGLE_LOG_NAME . ($cli ? '_cli' : '') . '.log';
     }
 }
